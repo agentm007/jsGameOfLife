@@ -1,10 +1,32 @@
+<!DOCTYPE html>
 <html>
 	<head>
 
 	</head>
 	</body>
-		<script >
+		
+		<script>
+			var canvas  = document.createElement('canvas');
+			document.body.appendChild(canvas);
+			var context = canvas.getContext('2d');
+			canvas.width = 800;
+			canvas.height = 800;
+			canvas.style = "border:1px solid #000000;";
 
+			var bheight, bwidth, iheight, iwidth;
+			bheight = 20;
+			bwidth = 20;
+			iheight = 20;
+			iwidth = 20;
+			
+			var val1[bheight][bwidth];
+			var val2[bheight][bwidth];
+
+			for(i=0; i < bheight; i++){
+				for(j=0; j < bwidth; j++){
+					context.fillRect(i*22,j*22,iheight,iwidth);
+				}
+			}
 		</script>
 	</body>
 </html>
