@@ -13,7 +13,6 @@
 			var canheight = 800;
 			canvas.width = canwidth;
 			canvas.height = canheight;
-			//canvas.style = "border:1px solid #000000; margin:auto display:block";
 			
 			//variables defining the play area
 			var cellsTall, cellsWide, cellHeight, cellWidth;
@@ -32,9 +31,7 @@
 			
 			//Creating the 2d arrays. Actuallly a huge pain in the ass in js
 			var block1 = [];
-			//var block2 = [];
 			arrayBuilder(block1, cellsTall, cellsWide, false);
-			//arrayBuilder(block2, cellsTall, cellsWide, false);
 			
 			
 			//adding the onclick event listener
@@ -127,12 +124,12 @@
 			
 			//function to fill the grid
 			function fillGrid(){
-				var context = canvas.getContext('2d');
 				clear();
 				drawGrid(cellsTall, cellsWide, cellHeight, cellWidth, "#336bff");
 				for(i=0; i<cellsWide; i++){
 					for(j=0; j<cellsTall; j++){
 						if(block1[i][j]){
+							context.beginPath();
 							context.fillRect((i*cellWidth)+i+1, (j*cellHeight)+j+1, (cellWidth-1), (cellHeight-1));
 						}	
 					}
@@ -152,29 +149,35 @@
 			
 			//drawing grid
 			function drawGrid(height, width, cellHeight, cellWidth, color){
-				var context = canvas.getContext('2d');
 				context.strokeWidth=1;
 				context.strokeStyle = color;
 				
 				cellHeight++;
-				cellWidth++
+				cellWidth++;
 				
+				var i;
 				for(i=0; i<= height; i++){
+					context.beginPath();
 					context.moveTo(0,i*cellHeight);
 					context.lineTo(tableWidth,i*cellHeight);
 					context.stroke();
 				}
 				
+				//var j;
 				for(i=0; i <= width; i++){
+					context.beginPath();
 					context.moveTo(i*cellWidth,0);
 					context.lineTo(i*cellWidth, tableHeight);
 					context.stroke();
 				}
+				
 			}
 			
 			//clearing the canvas
 			function clear(){
+				context.beginPath();
 				context.clearRect(0,0, canvas.width, canvas.height)
+				
 			}
 		</script>
 	</body>
