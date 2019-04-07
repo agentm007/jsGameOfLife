@@ -1,25 +1,80 @@
 <!DOCTYPE html>
 <html>
   <head>
-
+		<style>
+			.wrapper {
+				position: relative;
+			}
+			
+			.wrapper canvas{
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+		</style>
   </head>
   </body>
+	<div class="wrapper">
+		<canvas id="background" width="800" height="800"></canvas>
+		<canvas id="foreground" width="800" height="800"></canvas>
+	</div>
     <script>
       //Creating the Canvas
-      var canvas  = document.createElement('canvas');
-      document.body.appendChild(canvas);
-      var context = canvas.getContext('2d');
-      var canwidth = 800;
-      var canheight = 800;
+      /*
       canvas.width = canwidth;
-      canvas.height = canheight;
-      
-      //variables defining the play area
+      canvas.height = canheight;*/
+	  
+	  var background = document.getElementById("background");
+	  var foreground = document.getElementById("foreground");
+	  
+	  //variables defining the play area
       var cellsTall, cellsWide, cellHeight, cellWidth;
       cellsTall = 20;
       cellsWide = 20;
       cellHeight = 20;
       cellWidth = 20;
+      
+	  drawGrid(cellsTall,cellsWide,cellHeight,cellWidth,background, '#0b11d9')
+	  
+	   
+	   
+	   //drawing grid
+      function drawGrid(height, width, cellHeight, cellWidth, canvas, color = "Black" ){
+		var context = canvas.getContext('2d');
+		var tableHeight = height * (cellHeight + 1);
+		var tableWidth = width * (cellWidth + 1);
+        context.strokeWidth=1;
+        context.strokeStyle = color;
+        
+        cellHeight++;
+        cellWidth++;
+        
+        var i;
+        for(i=0; i<= height; i++){
+          context.beginPath();
+          context.moveTo(0,i*cellHeight);
+          context.lineTo(tableWidth,i*cellHeight);
+          context.stroke();
+        }
+        
+        //var j;
+        for(i=0; i <= width; i++){
+          context.beginPath();
+          context.moveTo(i*cellWidth,0);
+          context.lineTo(i*cellWidth, tableHeight);
+          context.stroke();
+        }
+        
+      }
+      
+     //clearing the canvas fix
+      function clear(canvas){
+		var context = canvas.getContext('2d');
+        context.beginPath();
+        context.clearRect(0,0, canvas.width, canvas.height)
+        
+      }
+	  
       
       //calculated values
       var tableHeight, tableWidth;
@@ -27,7 +82,7 @@
       tableWidth = cellsWide * (cellWidth + 1);
       
       //drawing the grid
-      drawGrid(cellsTall, cellsWide, cellHeight, cellWidth, "#336bff");
+      //drawGrid(cellsTall, cellsWide, cellHeight, cellWidth, "#336bff");
       
       //Creating the 2d arrays. Actuallly a huge pain in the ass in js
       var block1 = [];
@@ -35,8 +90,8 @@
       
       
       //adding the onclick event listener
-      canvas.addEventListener("mousedown", function(e){
-        var loc = canvas.getBoundingClientRect();
+      foreground.addEventListener("mousedown", function(e){
+        var loc = foreground.getBoundingClientRect();
         var x = e.pageX - loc.left;
         var y = e.pageY - loc.top;
         
@@ -44,7 +99,7 @@
           x = Math.floor(x/(tableWidth/cellsWide));
           y = Math.floor(y/(tableHeight/cellsTall));
           block1[x][y] = !block1[x][y];
-          fillGrid();
+          fillGrid(foreground);
         }
       });
       
@@ -59,7 +114,7 @@
         }
         
         block1 = block2;
-        fillGrid();
+        fillGrid(foreground);
       }
       
       //counting neighbours might be able to simplfy
@@ -123,15 +178,15 @@
       }
       
       //function to fill the grid
-      function fillGrid(){
-        clear();
-        drawGrid(cellsTall, cellsWide, cellHeight, cellWidth, "#336bff");
+      function fillGrid(canvas){
+        clear(canvas);
+		var context = canvas.getContext('2d');
         for(i=0; i<cellsWide; i++){
           for(j=0; j<cellsTall; j++){
             if(block1[i][j]){
               context.beginPath();
               context.fillRect((i*cellWidth)+i+1, (j*cellHeight)+j+1, (cellWidth-1), (cellHeight-1));
-            } 
+            }
           }
         } 
       }
@@ -145,39 +200,6 @@
           }
           outArray[i] = innerArray;
         }
-      }
-      
-      //drawing grid
-      function drawGrid(height, width, cellHeight, cellWidth, color){
-        context.strokeWidth=1;
-        context.strokeStyle = color;
-        
-        cellHeight++;
-        cellWidth++;
-        
-        var i;
-        for(i=0; i<= height; i++){
-          context.beginPath();
-          context.moveTo(0,i*cellHeight);
-          context.lineTo(tableWidth,i*cellHeight);
-          context.stroke();
-        }
-        
-        //var j;
-        for(i=0; i <= width; i++){
-          context.beginPath();
-          context.moveTo(i*cellWidth,0);
-          context.lineTo(i*cellWidth, tableHeight);
-          context.stroke();
-        }
-        
-      }
-      
-      //clearing the canvas
-      function clear(){
-        context.beginPath();
-        context.clearRect(0,0, canvas.width, canvas.height)
-        
       }
     </script>
   </body>
